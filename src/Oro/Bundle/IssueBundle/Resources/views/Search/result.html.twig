@@ -1,0 +1,26 @@
+{% extends 'OroSearchBundle:Search:searchResultItem.html.twig' %}
+
+{% set showImage = false %}
+{% set recordUrl = indexer_item.recordUrl %}
+{% set title = indexer_item.recordTitle|truncate(22) %}
+
+{% set entityType = 'Issue' %}
+{% block additional_info %}
+    <div class="control-label">
+        <label class="control-label">
+
+            <i class="icon-info-sign tooltip-icon" data-placement="bottom"
+               data-content="<div class=&quot;oro-popover-content&quot;>
+                    {{ (entity.description|default('No description'))|truncate(64) }}
+               </div>"
+               data-toggle="popover" data-original-title="description" title="description">
+            </i>
+        </label>
+    </div>
+{% endblock %}
+
+{% set entityInfo = [
+    {'title': 'oro.issue.code.label'|trans, 'value': entity.code},
+    {'title': 'oro.issue.reporter.label'|trans, 'value': entity.reporter},
+    {'title': 'oro.issue.status.label'|trans, 'value': entity.workflowStep},
+] %}

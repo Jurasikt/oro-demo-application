@@ -1,0 +1,20 @@
+{% extends 'OroUIBundle:actions:index.html.twig' %}
+{% import 'OroUIBundle::macros.html.twig' as UI %}
+{% set pageTitle = 'oro.issue.entity_label'| trans %}
+
+{% block navButtons %}
+    {% include 'OroImportExportBundle:ImportExport:buttons.html.twig' with {
+        entity_class: entity_class,
+        exportProcessor: 'oro_issue_export',
+        exportTemplateProcessor: 'oro_issue_export',
+        importProcessor: 'oro_issue_import',
+        importTitle: 'Import Issue'
+    } %}
+    {% if resource_granted('oro_issue_create') %}
+        {{ UI.addButton({
+            'path' : path('oro_issue_create'),
+            'entity_label': 'issue'
+        }) }}
+    {% endif %}
+
+{% endblock %}

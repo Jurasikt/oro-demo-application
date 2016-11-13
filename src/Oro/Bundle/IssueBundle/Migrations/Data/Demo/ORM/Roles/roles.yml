@@ -1,0 +1,23 @@
+ROLE_ISSUE_COLLABORATOR:
+    bap_role: ROLE_USER
+    label: Collaborators
+    permissions:
+        entity|Oro\Bundle\TagBundle\Entity\Tag: [VIEW_SYSTEM, CREATE_BASIC, EDIT_BASIC, DELETE_BASIC, ASSIGN_BASIC]
+        entity|Oro\Bundle\WorkflowBundle\Entity\WorkflowDefinition: []
+        entity|Oro\Bundle\DashboardBundle\Entity\Dashboard: [VIEW_SYSTEM, CREATE_BASIC, EDIT_BASIC, DELETE_BASIC, ASSIGN_BASIC]
+        entity|Oro\Bundle\NoteBundle\Entity\Note: [VIEW_SYSTEM, CREATE_BASIC, EDIT_BASIC, DELETE_BASIC, ASSIGN_BASIC]
+        entity|Oro\Bundle\CommentBundle\Entity\Comment: [VIEW_SYSTEM, CREATE_BASIC, EDIT_BASIC, DELETE_BASIC, ASSIGN_BASIC]
+        entity|Oro\Bundle\DataGridBundle\Entity\GridView: [VIEW_SYSTEM, CREATE_BASIC, EDIT_BASIC, DELETE_BASIC, ASSIGN_BASIC]
+        entity|Oro\Bundle\IssueBundle\Entity\Issue: [VIEW_SYSTEM, CREATE_BASIC, EDIT_BASIC, DELETE_BASIC, ASSIGN_BASIC]
+        action|oro_dataaudit_history: [EXECUTE]
+        action|oro_importexport_export: [EXECUTE]
+        action|oro_importexport_import: [EXECUTE]
+        action|oro_search: [EXECUTE]
+        action|oro_config_system: []
+        action|oro_platform_system_info: []
+        action|oro_tag_assign_unassign: [EXECUTE]
+        action|oro_tag_unassign_global: [EXECUTE]
+        action|oro_workflow: [EXECUTE]
+        action|oro_report_view_sql: []
+        action|update_own_profile: [EXECUTE]
+        action|update_own_configuration: [EXECUTE]

@@ -1,0 +1,16 @@
+oro_dashboard_config:
+    widgets:
+        issue_status:
+            label: Issues by status
+            route: oro_issue_dashboard_chart
+            description: Bar chart for issues by status
+            configuration: ~
+
+        issue_grid:
+            label: Active Issue
+            route: oro_issue_dashboard_grid
+            description: Show active issue for current user
+            configuration:
+                owners:
+                    type: oro_type_widget_owners
+                    show_on_widget: true

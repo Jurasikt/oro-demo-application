@@ -1,0 +1,44 @@
+oro_menu_config:
+    items:
+        issue_tab:
+            label: 'oro.issue.entity_label'
+            uri:   '#'
+            display: true
+            extras:
+                position: 10
+
+        issue_list:
+            label: 'oro.issue.entity_plural_label'
+            route: 'oro_issue_index'
+            display: true
+            extras:
+                position:  10
+                routes: ['oro_issue_update', 'oro_issue_create', 'oro_issue_view']
+
+        issue_usermenue:
+            label: 'oro.issue.usermenu_label'
+            route: 'oro_issue_index'
+            routeParameters:
+                grid: 'widget-issue-basic-grid'
+            display: true
+            extras:
+                position:  60
+
+    tree:
+        application_menu:
+            children:
+                issue_tab:
+                    children:
+                        issue_list: ~
+                        issue_usermenue: ~
+
+        usermenu:
+            children:
+                issue_usermenue: ~
+
+oro_titles:
+    oro_issue_index: ~
+    oro_issue_view: '%%entity.summary%%'
+    oro_issue_create: oro.ui.create_entity
+    oro_issue_update: '%%entity.summary%% - Edit'
+    oro_issue_child_create: oro.issue.oro_titles.create_subtask

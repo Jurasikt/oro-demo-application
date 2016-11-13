@@ -1,0 +1,304 @@
+datagrid:
+    oro-issue-grid:
+        acl_resource: oro_issue_view
+        options:
+            export: true
+        source:
+            type: orm
+            query:
+                select:
+                    - i.id
+                    - i.summary
+                    - i.code
+                    - reporter.username AS r_user
+                    - assignee.username AS a_user
+                    - priority.label AS issue_priority
+                    - resolution.label AS issue_resolution
+                    - i.issueType AS issue_type
+                    - i.createdAt
+                    - i.updatedAt
+                    - ws.label as status
+                from:
+                    - { table: '%oro_issue.entity.class%', alias: i }
+                join:
+                    left:
+                        - { join: i.reporter, alias: reporter }
+                        - { join: i.assignee, alias: assignee }
+                        - { join: i.issuePriority, alias: priority }
+                        - { join: i.issueResolution, alias: resolution }
+                        - { join: i.workflowStep, alias: ws }
+        columns:
+            summary:
+                label:         oro.issue.summary.label
+            code:
+                label:         oro.issue.code.label
+            r_user:
+                label:         oro.issue.reporter.label
+            a_user:
+                label:         oro.issue.assignee.label
+            issue_priority:
+                label:         oro.issue.priority.label
+            status:
+                label:         oro.issue.status.label
+            issue_type:
+                label:         oro.issue.issue_type.label
+            issue_resolution:
+                label:         oro.issue.issue_resolution.label
+            updatedAt:
+                label:         oro.ui.updated_at
+                frontend_type: datetime
+            createdAt:
+                label:         oro.ui.created_at
+                frontend_type: datetime
+        sorters:
+            columns:
+                updatedAt:
+                    data_name: i.updatedAt
+                issue_priority:
+                    data_name: priority.order
+                r_user:
+                    data_name: reporter.username
+                a_user:
+                    data_name: assignee.username
+                issue_resolution:
+                    data_name: resolution.order
+                issue_type:
+                    data_name: i.issueType
+                code:
+                    data_name: i.id
+            default:
+                updatedAt: DESC
+
+        filters:
+            columns:
+                summary:
+                    type:      string
+                    data_name: i.summary
+                assignee:
+                    type: choice-tree
+                    label: oro.issue.assignee.label
+                    data_name: i.assignee
+                    autocomplete_alias: users
+                    renderedPropertyName: 'fullName'
+                    className: 'Oro\Bundle\UserBundle\Entity\User'
+                reporter:
+                    type: choice-tree
+                    label: oro.issue.reporter.label
+                    data_name: i.reporter
+                    autocomplete_alias: users
+                    renderedPropertyName: 'fullName'
+                    className: 'Oro\Bundle\UserBundle\Entity\User'
+                resolution:
+                    type: string
+                    label: oro.issue.issue_resolution.label
+                    data_name: resolution.label
+                priority:
+                    type:      string
+                    label: oro.issue.issue_priority.label
+                    data_name: priority.label
+                createdAt:
+                    type:      datetime
+                    data_name: i.createdAt
+                updatedAt:
+                    type:      datetime
+                    data_name: i.updatedAt
+
+        properties:
+            id: ~
+            owner: ~
+            view_link:
+                type:       url
+                route:      oro_issue_view
+                params:     [ id ]
+            update_link:
+                type:       url
+                route:      oro_issue_update
+                params:     [ id ]
+            delete_link:
+                type:       url
+                route:      oro_api_delete_issue
+                params:     [ id ]
+        actions:
+            view:
+                type:          navigate
+                label:         oro.grid.action.view
+                acl_resource:  oro_issue_view
+                icon:          eye-open
+                link:          view_link
+                rowAction:     true
+            update:
+                type:          navigate
+                acl_resource:  oro_issue_update
+                label:         oro.grid.action.update
+                icon:          edit
+                link:          update_link
+            delete:
+                type:          delete
+                acl_resource:  oro_issue_delete
+                label:         oro.grid.action.delete
+                icon:          trash
+                link:          delete_link
+
+    oro-issue-user-grid:
+        extends: oro-issue-grid
+        options: ~
+        source:
+            type: orm
+            query:
+                where:
+                    or:
+                        - assignee.id = :user
+                        - reporter.id = :user
+            bind_parameters:
+                user: userId
+        filters: ~
+
+    subtask-issue:
+        acl_resource: oro_issue_view
+        source:
+            type: orm
+            query:
+                select:
+                    - i.id
+                    - i.summary
+                    - assignee.username as a_user
+                    - i.updatedAt
+                    - ws.label as status
+                from:
+                    - { table: '%oro_issue.entity.class%', alias: i }
+                join:
+                    left:
+                        - { join: i.assignee, alias: assignee }
+                        - { join: i.workflowStep, alias: ws }
+                where:
+                    and:
+                        - i.parent = :parent
+            bind_parameters:
+                parent: parentId
+        columns:
+            summary:
+                label:         oro.issue.summary.label
+            a_user:
+                label:         oro.issue.assignee.label
+            updatedAt:
+                label:         oro.ui.updated_at
+                frontend_type: datetime
+        sorters:
+            columns:
+                updatedAt:
+                    data_name: i.updatedAt
+            default:
+                date: DESC
+        properties:
+            id: ~
+            owner: ~
+            view_link:
+                type:       url
+                route:      oro_issue_view
+                params:     [ id ]
+        actions:
+            view:
+                type:          navigate
+                label:         oro.grid.action.view
+                icon:          eye-open
+                link:          view_link
+                rowAction:     true
+
+    collaborators-issue:
+        source:
+            type: orm
+            query:
+                select:
+                    - user.id
+                    - CONCAT(user.firstName, ' ', user.lastName) AS fullName
+                    - user.email
+                from:
+                    - { table: '%oro_issue.entity.class%', alias: issue }
+                join:
+                    inner:
+                        - { join: issue.collaborators, alias: user }
+                where:
+                    and:
+                        - issue.id = :issue
+            bind_parameters:
+                issue: issueId
+        columns:
+            fullName:
+                label:  oro.issue.collaborators.label
+            email:
+                label:  oro.user.email.entity_label
+        properties:
+            id: ~
+            owner: ~
+            view_link:
+                type:       url
+                route:      oro_user_view
+                params:     [ id ]
+        actions:
+            view:
+                type:          navigate
+                label:         oro.grid.action.view
+                icon:          eye-open
+                link:          view_link
+                rowAction:     true
+
+    widget-issue-basic-grid:
+        acl_resource: oro_issue_view
+        source:
+            type: orm
+            query:
+                select:
+                    - issue.id
+                    - issue.summary
+                    - >
+                        CASE WHEN issue.assignee IS NULL
+                          THEN 'Unassigned'
+                        ELSE
+                          CONCAT(user.firstName, ' ', user.lastName)
+                        END AS assigneeUserName
+
+                    - workflowStep.label AS label
+                from:
+                    - { table: '%oro_issue.entity.class%', alias: issue }
+                join:
+                    inner:
+                        - { join: issue.collaborators, alias: user }
+                        - { join: issue.workflowStep, alias: workflowStep }
+                    left:
+                        - { join: issue.assignee, alias: assignee}
+                where:
+                    and:
+                        - user.id = @oro_security.security_facade->getLoggedUserId
+                        - workflowStep.name IN ('open', 'in_progress')
+        columns:
+            assigneeUserName:
+                label:  oro.issue.assignee.label
+            summary:
+                label:  oro.issue.summary.label
+            label:
+                label: oro.issue.status.label
+        properties:
+            id: ~
+            owner: ~
+            view_link:
+                type:       url
+                route:      oro_issue_view
+                params:     [ id ]
+        actions:
+            view:
+                type:          navigate
+                label:         oro.grid.action.view
+                icon:          eye-open
+                link:          view_link
+                rowAction:     true
+
+    widget-issue-small-grid:
+        extends: widget-issue-basic-grid
+        acl_resource: oro_issue_view
+        options:
+            toolbarOptions:
+                addColumnManager: false
+                hide: true
+                pageSize:
+                    items: [10]
+                    default_per_page: 10

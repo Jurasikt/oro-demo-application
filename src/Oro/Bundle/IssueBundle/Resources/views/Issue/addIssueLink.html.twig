@@ -1,0 +1,22 @@
+{{ UI.clientLink({
+    'dataUrl': path('oro_issue_create'),
+    'aCss': 'no-hash',
+    'iCss': 'icon-envelope',
+    'dataId': entity.id,
+    'label' : 'Add issue',
+    'widget' : {
+        'type' : 'dialog',
+        'multiple' : true,
+        'options' : {
+            'alias': 'issue-dialog',
+            'dialogOptions' : {
+                'title' : 'Add issue',
+                'allowMaximize': true,
+                'allowMinimize': true,
+                'dblclick': 'maximize',
+                'maximizedHeightDecreaseBy': 'minimize-bar',
+                'width': 1000
+            }
+        }
+    }
+}) }}

@@ -1,0 +1,19 @@
+oro_issue_bundle:
+    resource:     "@OroIssueBundle/Controller"
+    type:         annotation
+    prefix:       /
+
+
+oro_issue_bundle_api:
+    resource:     "@OroIssueBundle/Controller/Api/Rest/IssueController.php"
+    type:         rest
+    prefix:       api/rest/{version}
+    requirements:
+        version:  latest|v1
+    defaults:
+        version:  latest
+
+oro_issue_bundle_api_dashboard:
+    resource:     "@OroIssueBundle/Controller/Dashboard"
+    type:         annotation
+    prefix:       /dashboard

@@ -1,0 +1,85 @@
+definitions:
+    issue_create:
+        label: 'Add collaborators on create issue and refresh issue code'
+        enabled: true
+        order: 10
+        exclude_definitions: [issue_create]
+        entity:  Oro\Bundle\IssueBundle\Entity\Issue
+        actions_configuration:
+            - '@tree':
+                conditions:
+                    '@not_empty': $reporter
+                actions:
+                    - '@call_method':
+                        object: $.data
+                        method: addCollaborator
+                        method_parameters: [$reporter]
+            - '@tree':
+                conditions:
+                    '@and':
+                        - '@not_empty': $assignee
+                        - '@not_equal': [$assignee, $reporter]
+                actions:
+                    - '@call_method':
+                        object: $.data
+                        method: addCollaborator
+                        method_parameters: [$assignee]
+            - '@tree':
+                conditions:
+                    '@empty': $code
+                actions:
+                    - '@call_method':
+                        object: $.data
+                        method: setUniqueCode
+    issue_update:
+        label: 'Add collaborators after update issue'
+        enabled: true
+        order: 20
+        exclude_definitions: [issue_update]
+        entity:  Oro\Bundle\IssueBundle\Entity\Issue
+        actions_configuration:
+            - '@tree':
+                conditions:
+                    '@not_empty': $assignee
+                actions:
+                    - '@call_method':
+                        object: $.data
+                        method: addCollaborator
+                        method_parameters: [$assignee]
+    issue_add_note:
+        label: 'Update issue when note added'
+        enabled: true
+        order: 30
+        exclude_definitions: [issue_add_note]
+        entity: Oro\Bundle\NoteBundle\Entity\Note
+        actions_configuration:
+            - '@tree':
+                conditions:
+                    '@not_empty': $target
+                actions:
+                    - '@assign_value': [$.issue, $target]
+                    - '@tree':
+                        conditions:
+                            '@instanceof': [$.issue, Oro\Bundle\IssueBundle\Entity\Issue]
+                        actions:
+                            - '@call_method':
+                                object: $.issue
+                                method: addCollaborator
+                                method_parameters: [$owner]
+                            - '@call_method':
+                                object: $.issue
+                                method: setUpdatedAt
+                                method_parameters: [$createdAt]
+
+triggers:
+    issue_create:
+        -
+            event: create
+
+    issue_update:
+        -
+            event: update
+
+    issue_add_note:
+        -
+            event: create

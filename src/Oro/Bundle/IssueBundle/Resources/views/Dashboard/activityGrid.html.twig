@@ -1,0 +1,16 @@
+{% extends 'OroDashboardBundle:Dashboard:widget.html.twig' %}
+{% import 'OroDataGridBundle::macros.html.twig' as dataGrid %}
+{% set gridName = 'widget-issue-small-grid' %}
+{% block content %}
+    {{ dataGrid.renderGrid(gridName)}}
+{% endblock %}
+
+{% block actions %}
+    {% set actions = [{
+        'url': path('oro_issue_index', {grid: 'widget-issue-basic-grid'}),
+        'type': 'link',
+        'label': 'View all'
+    }] %}
+
+    {{ parent() }}
+{% endblock %}

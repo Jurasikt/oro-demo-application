@@ -1,0 +1,73 @@
+Oro\Bundle\IssueBundle\Entity\Issue:
+    alias:                          oro_issue
+    title_fields:                   [summary]
+
+    route:
+        name:                       oro_issue_view
+        parameters:
+            id:                     id
+    search_template:                OroIssueBundle:Search:result.html.twig
+    fields:
+        -
+            name:                   code
+            target_type:            text
+            target_fields:          [code]
+        -
+            name:                   description
+            target_type:            text
+            target_fields:          [description]
+
+        -
+            name:                   summary
+            target_type:            text
+            target_fields:          [summary]
+
+        -
+            name:                   issueType
+            target_type:            text
+            target_fields:          [issueType]
+
+        -
+            name:                   assignee
+            relation_type:          many-to-one
+            relation_fields:
+                -
+                    name:                   username
+                    target_type:            text
+                    target_fields:          [assigneeUsername]
+
+        -
+            name:                   reporter
+            relation_type:          many-to-one
+            relation_fields:
+                -
+                    name:                   username
+                    target_type:            text
+                    target_fields:          [reporterUsername]
+
+        -
+            name:                   issuePriority
+            relation_type:          many-to-one
+            relation_fields:
+                -
+                    name:                   label
+                    target_type:            text
+                    target_fields:          [issuePriority]
+
+        -
+            name:                   issueResolution
+            relation_type:          many-to-one
+            relation_fields:
+                -
+                    name:                   label
+                    target_type:            text
+                    target_fields:          [issueResolution]
+
+        -
+            name:                   workflowStep
+            relation_type:          many-to-one
+            relation_fields:
+                -
+                    name:                   label
+                    target_type:            text
+                    target_fields:          [status]

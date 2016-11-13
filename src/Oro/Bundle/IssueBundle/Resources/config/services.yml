@@ -1,0 +1,94 @@
+parameters:
+    oro_issue.entity.class:                 Oro\Bundle\IssueBundle\Entity\Issue
+    oro_issue.form.class:                   Oro\Bundle\IssueBundle\Form\Type\IssueType
+    oro_issue.form.handler.class:           Oro\Bundle\IssueBundle\Form\Handler\IssueHandler
+    oro_issue.manager.api.class:            Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
+    oro_issue.issue_data_provider.class:    Oro\Bundle\IssueBundle\Dashboard\IssueDataProvider
+    oro_issue.placeholder.filter.class:     Oro\Bundle\IssueBundle\Placeholder\PlaceholderFilter
+    oro_issue.form.api.class:               Oro\Bundle\IssueBundle\Form\Type\IssueApiType
+    oro_issue.validator.contains.is_parent.class: Oro\Bundle\IssueBundle\Validator\Constraints\IsParentValidator
+    oro_issue.validator.contains.issue_type.class: Oro\Bundle\IssueBundle\Validator\Constraints\IssueTypeValidator
+    oro_issue.issue_manager.class:          Oro\Bundle\IssueBundle\Entity\Manager\IssueManager
+
+services:
+    oro_issue.form.type:
+        class: '%oro_issue.form.class%'
+        tags:
+            - {name: form.type, alias: oro_issue}
+
+    oro_issue.form.api.type:
+        class: '%oro_issue.form.api.class%'
+        calls:
+            - [setSecurityFacade, ['@oro_security.security_facade']]
+        tags:
+            - {name: form.type, alias: oro_issue_api}
+
+    oro_issue.form:
+        class: Symfony\Component\Form\Form
+        factory: ['@form.factory', createNamed]
+        arguments:
+            - 'oro_issue'
+            - 'oro_issue'
+
+    oro_issue.form.api:
+        class: Symfony\Component\Form\Form
+        factory: ['@form.factory', createNamed]
+        arguments:
+            - ~
+            - 'oro_issue_api'
+
+    oro_issue.form.handler:
+        class: '%oro_issue.form.handler.class%'
+        calls:
+            - [setForm, ['@oro_issue.form']]
+        arguments:
+            - '@request_stack'
+            - '@doctrine.orm.entity_manager'
+
+    oro_issue.form.handler.api:
+        parent: oro_issue.form.handler
+        calls:
+            - [setForm, ['@oro_issue.form.api']]
+
+    oro_issue.issue_manager:
+        class: '%oro_issue.issue_manager.class%'
+        arguments:
+            - '@doctrine.orm.entity_manager'
+
+
+    oro_issue.manager.api:
+        class:  '%oro_issue.manager.api.class%'
+        parent: oro_soap.manager.entity_manager.abstract
+        arguments:
+            - '%oro_issue.entity.class%'
+            - '@doctrine.orm.entity_manager'
+
+    oro_issue.placeholder.filter:
+        class: '%oro_issue.placeholder.filter.class%'
+
+    oro_issue.issue_data_provider:
+        class: '%oro_issue.issue_data_provider.class%'
+        arguments:
+            - '@doctrine'
+
+    oro_issue.validator.contains.is_parent:
+        class: '%oro_issue.validator.contains.is_parent.class%'
+        arguments:
+            - '@oro_issue.placeholder.filter'
+        tags:
+            - { name: validator.constraint_validator, alias: oro_issue.validator.is_parent }
+
+    oro_issue.validator.contains.issue_type:
+        class: '%oro_issue.validator.contains.issue_type.class%'
+        arguments:
+            - '@oro_issue.issue_manager'
+        tags:
+            - { name: validator.constraint_validator, alias: oro_issue.validator.issue_type }
+
+    oro_issue.widget_provider.actions.create_issue:
+        parent: oro_ui.widget_provider.action_button.abstract
+        arguments:
+            - oro_issue.create.on_user_page.button
+            - oro_issue.create.on_user_page.link
+        tags:
+            - { name: oro_ui.view_action_provider, group: activity }

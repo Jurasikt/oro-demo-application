@@ -1,0 +1,63 @@
+oro:
+    issue:
+        entity_label:              Issue
+        entity_plural_label:       Issues
+        usermenu_label:            My Issue
+        id.label:                  ID
+        issue_type.label:          Issue Type
+        summary.label:             Summary
+        description.label:         Description
+        code.label:                Code
+        created_at.label:          Created At
+        updated_at.label:          Updatet At
+        assignee.label:            Assignee
+        reporter.label:            Reporter
+        priority.label:            Proirity
+        collaborators.label:       Collaborators
+        issue_priority.label:      Proirity
+        issue_resolution.label:    Resolution
+        organization.label:        Organization
+        parent.label:              Parent
+        subtask.label:             Subtask
+        add_subtask.label:         Add subtask
+        saved_message:             Issue saved
+        status.label:              Status
+        workflow_item.label:       Workflow item
+        workflow_step.label:       Workflow status
+
+        issuepriority:
+            entity_label:              Issue Resolution
+            entity_plural_label:       Issue Resolutions
+            id.label:                  ID
+            label.label:               Name
+            order.label:               Order
+
+        issueresolution:
+            entity_label:              Issue Resolution
+            entity_plural_label:       Issue Resolutions
+            id.label:                  ID
+            label.label:               Name
+            order.label:               Order
+
+        controller:
+            add_subtask_error:         Subtask can't be added.
+
+        create:
+            entity.label:              Create Issue
+
+        oro_titles:
+            create_subtask:            Create Subtask
+
+        workflow:
+            status:
+                open:                  Open
+                closed:                Closed
+                in_progress:           In progress
+                resolved:              Resolved
+                reopen:                Reopen
+            transitions:
+                start_progress:        Start progress
+                stop_progress:         Stop progress
+                resolve:               Resolve
+                close:                 Close
+                reopen:                Reopen

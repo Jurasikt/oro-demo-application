@@ -1,0 +1,11 @@
+Oro\Bundle\IssueBundle\Entity\Issue:
+    properties:
+        summary:
+            - NotBlank: ~
+            - Length:
+                max: 255
+                min: 3
+        issueType:
+            - NotBlank: ~
+        issuePriority:
+            - NotBlank: ~
