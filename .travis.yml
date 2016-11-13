@@ -1,0 +1,22 @@
+sudo: false
+
+language: php
+
+matrix:
+    include:
+        - php: 5.5
+        env: TESTSUITE="unit"
+        - php: 5.6
+        env: TESTSUITE="unit"
+        - php: 7.0
+        env: TESTSUITE="unit"
+
+
+before_install:
+    - bash .travis/$TESTSUITE.sh before_install;
+
+install:
+    - bash .travis/$TESTSUITE.sh install;
+
+script:
+    - bash .travis/$TESTSUITE.sh script;

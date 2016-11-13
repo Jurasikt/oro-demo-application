@@ -33,14 +33,6 @@ http://getcomposer.org/ or just run the following command:
     curl -s https://getcomposer.org/installer | php
 ```
 
-- Clone https://github.com/orocrm/platform-application.git Platform Application project with
-
-```bash
-    git clone https://github.com/orocrm/platform-application.git
-```
-
-- Make sure that you have [NodeJS][4] installed
-
 - Install OroCRM dependencies with composer. If installation process seems too slow you can use "--prefer-dist" option.
   Go to crm-application folder and run composer installation:
 
