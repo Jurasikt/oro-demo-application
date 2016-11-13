@@ -17,10 +17,10 @@ matrix:
 
 
 before_install:
-    - bash .travis/$TESTSUITE.sh before_install;
+    - bash .travis/$TESTSUITE.sh before_install
 
 install:
-    - bash .travis/$TESTSUITE.sh install;
+    - bash .travis/$TESTSUITE.sh install
 
 script:
-    - bash .travis/$TESTSUITE.sh script;
+    - bash .travis/$TESTSUITE.sh script
