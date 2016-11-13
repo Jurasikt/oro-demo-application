@@ -1,6 +1,11 @@
 A simple Bug Tracking System based on Oro Platform.
 ==============================
 
+
+| Branches      | Builds                                                                                                                                            |
+| ------------- |:------------------------------------------------------------------------------------------------------------------------------------------------- |
+| master        | [![The Build Status](https://travis-ci.org/Jurasikt/oro-demo-application.svg?branch=master)](https://travis-ci.org/Jurasikt/oro-demo-application)    |
+
 ## Requirements
 
 Oro Platform is a Symfony 2 based application with the following requirements:
